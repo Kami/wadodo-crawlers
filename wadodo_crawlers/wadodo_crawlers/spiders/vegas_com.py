@@ -2,7 +2,7 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import HtmlXPathSelector
 
-from wadodo_scrapers.items import ActivityItem, ActivityItemLoader
+from wadodo_crawlers.items import ActivityItem, ActivityItemLoader
 
 
 class VegasDotComSpider(CrawlSpider):
