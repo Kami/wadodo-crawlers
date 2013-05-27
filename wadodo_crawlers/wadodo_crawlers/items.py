@@ -1,13 +1,12 @@
 from scrapy.item import Item, Field
 from scrapy.contrib.loader import XPathItemLoader
 from scrapy.contrib.loader.processor import TakeFirst, MapCompose, Join
+from scrapy.contrib.loader.processor import Identity
 
 from wadodo_crawlers.utils import replace_nbrs, JoinAddress
 
 
 class ActivityItem(Item):
-    source_url = Field()
-
     name = Field()
     address = Field()
     phone_number = Field()
@@ -15,6 +14,10 @@ class ActivityItem(Item):
     description = Field()
     time_needed = Field()
     price = Field()
+
+    source_url = Field()
+    image_urls = Field()
+    images = Field()
 
 
 class ActivityItemLoader(XPathItemLoader):
@@ -27,3 +30,5 @@ class ActivityItemLoader(XPathItemLoader):
     description_out = Join('\n')
     time_needed_out = TakeFirst()
     price_out = TakeFirst()
+    image_urls_out = Identity()
+    images = Identity()
