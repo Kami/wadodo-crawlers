@@ -3,7 +3,7 @@ from scrapy.contrib.loader import XPathItemLoader
 from scrapy.contrib.loader.processor import TakeFirst, MapCompose, Join
 from scrapy.contrib.loader.processor import Identity
 
-from wadodo_crawlers.utils import replace_nbrs, JoinAddress
+from wadodo_crawlers.utils.misc import replace_nbrs, JoinAddress
 
 
 class ActivityItem(Item):

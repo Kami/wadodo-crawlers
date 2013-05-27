@@ -3,6 +3,7 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import HtmlXPathSelector
 
 from wadodo_crawlers.items import ActivityItem, ActivityItemLoader
+from wadodo_crawlers.utils.flickr import get_images_for_term
 
 
 class VegasDotComSpider(CrawlSpider):
@@ -19,6 +20,16 @@ class VegasDotComSpider(CrawlSpider):
         Rule(SgmlLinkExtractor(allow=('/attractions/.+/index\.html', ),
                                restrict_xpaths=['//a[@class="standard-info-title-link"]']), callback='parse_activity'),
     ]
+
+    def __init__(self, *args, **kwargs):
+        flickr_api_key = kwargs.pop('flickr_api_key', None)
+
+        if flickr_api_key is None:
+            raise ValueError('Missing flickr_api_key argument')
+
+        self._flickr_api_key = flickr_api_key
+
+        super(VegasDotComSpider, self).__init__(*args, **kwargs)
 
     def parse_activity(self, response):
         l = ActivityItemLoader(item=ActivityItem(), response=response)
@@ -40,4 +51,13 @@ class VegasDotComSpider(CrawlSpider):
         l.add_xpath('price', '//div[@class="fromprice-price"]/text()')
 
         l.add_value('source_url', response.url)
-        return l.load_item()
+
+        item = l.load_item()
+        name = item['name']
+
+        images = get_images_for_term(self._flickr_api_key, search_term=name)
+        image_urls = [item['url'] for item in images]
+        l.add_value('image_urls', image_urls)
+
+        item = l.load_item()
+        return item
