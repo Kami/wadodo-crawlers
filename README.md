@@ -7,7 +7,7 @@
 ## Usage
 
 ```bash
-scrapy crawl  -o <output file name> -t json <crawler name> \
+scrapy crawl -o <output file name> -t jsonlines <crawler name> \
 --flickr_api_key=<flickr api_key> [--set=DOWNLOAD_DELAY=<seconds>]
 ```
 
