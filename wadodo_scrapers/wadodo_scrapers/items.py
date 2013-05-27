@@ -25,5 +25,5 @@ class ActivityItemLoader(XPathItemLoader):
     address_out = Join()
     description_in = MapCompose(replace_nbrs)
     description_out = Join('\n')
-    time_needed_in = TakeFirst()
-    price_in = TakeFirst()
+    time_needed_out = TakeFirst()
+    price_out = TakeFirst()
