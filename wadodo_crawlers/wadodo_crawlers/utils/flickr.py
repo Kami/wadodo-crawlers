@@ -23,7 +23,7 @@ def parse_result(result):
     return result
 
 
-def get_images_for_term(api_key, search_term, count=5):
+def get_images_for_term(api_key, search_term, bbox=None, count=5):
     global FLICKR_CLIENT
 
     if not FLICKR_CLIENT:
@@ -32,7 +32,7 @@ def get_images_for_term(api_key, search_term, count=5):
     flickr = FLICKR_CLIENT
     result = flickr.photos_search(text=search_term, per_page=PER_PAGE,
                                   license=LICENSES, content_type=CONTENT_TYPES,
-                                  sort=SORT, format='json')
+                                  sort=SORT, bbox=bbox, format='json')
     result = parse_result(result)
     photos = result['photos']['photo']
 

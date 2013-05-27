@@ -5,6 +5,15 @@ from scrapy.selector import HtmlXPathSelector
 from wadodo_crawlers.items import ActivityItem, ActivityItemLoader
 from wadodo_crawlers.utils.flickr import get_images_for_term
 
+# Bounding box for Nevada
+# http://www.flickr.com/places/info/2347587
+NEVADA_BOUNDING_BOX = [
+  '-120.0058',
+  '35.0023',
+  '-114.0394',
+  '42.0018'
+]
+
 
 class VegasDotComSpider(CrawlSpider):
     name = 'vegas.com'
@@ -28,6 +37,7 @@ class VegasDotComSpider(CrawlSpider):
             raise ValueError('Missing flickr_api_key argument')
 
         self._flickr_api_key = flickr_api_key
+        self._nevada_bbox = ','.join(NEVADA_BOUNDING_BOX)
 
         super(VegasDotComSpider, self).__init__(*args, **kwargs)
 
@@ -55,7 +65,8 @@ class VegasDotComSpider(CrawlSpider):
         item = l.load_item()
         name = item['name']
 
-        images = get_images_for_term(self._flickr_api_key, search_term=name)
+        images = get_images_for_term(self._flickr_api_key, search_term=name,
+                                     bbox=self._nevada_bbox)
         image_urls = [item['url'] for item in images]
         l.add_value('image_urls', image_urls)
 
