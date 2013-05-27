@@ -23,7 +23,17 @@ class VegasDotComSpider(CrawlSpider):
     def parse_activity(self, response):
         l = ActivityItemLoader(item=ActivityItem(), response=response)
         l.add_xpath('name', '//h1[@class="main-page-title"]/text()')
+
+        # Address
         l.add_xpath('address', '//div[@class="product-summary-list-box"]/div[1]/text()')
+
+        # City
+        l.add_xpath('address', '//div[@id="product-location"]/div/div[@class="street-address"]/following-sibling::div/span[@class="locality"]/text()')
+
+        # State
+        l.add_xpath('address', '//div[@id="product-location"]/div/div[@class="street-address"]/following-sibling::div/abbr[@class="region"]/text()')
+
+        # Zip Code
         l.add_xpath('address', '//div[@id="product-location"]/div/div[@class="street-address"]/following-sibling::div/span[@class="postal-code"]/text()')
         l.add_xpath('description', '//div[@class="product-details-description layout-module expandable collapsed"]/p/text()')
         l.add_xpath('time_needed', '//strong[contains(text(), "Tour Length: ")]/following-sibling::div/text()')
