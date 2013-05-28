@@ -4,15 +4,7 @@ from scrapy.selector import HtmlXPathSelector
 
 from wadodo_crawlers.items import ActivityItem, ActivityItemLoader
 from wadodo_crawlers.utils.flickr import get_images_for_term
-
-# Bounding box for Nevada
-# http://www.flickr.com/places/info/2347587
-NEVADA_BOUNDING_BOX = [
-  '-120.0058',
-  '35.0023',
-  '-114.0394',
-  '42.0018'
-]
+from wadodo_crawlers.settings import NEVADA_BOUNDING_BOX
 
 
 class VegasDotComSpider(CrawlSpider):

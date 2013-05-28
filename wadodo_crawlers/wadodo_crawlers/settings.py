@@ -33,3 +33,13 @@ IMAGES_STORE = 'downloaded_images/'
 COOKIES_ENABLED = False
 DOWNLOAD_DELAY = 2
 USER_AGENT = random.choice(USER_AGENTS)
+
+# Misc
+# Bounding box for Nevada
+# http://www.flickr.com/places/info/2347587
+NEVADA_BOUNDING_BOX = [
+  '-120.0058',
+  '35.0023',
+  '-114.0394',
+  '42.0018'
+]
