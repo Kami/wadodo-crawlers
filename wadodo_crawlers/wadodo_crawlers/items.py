@@ -8,6 +8,7 @@ from wadodo_crawlers.utils.misc import replace_nbrs, JoinAddress
 
 class ActivityItem(Item):
     name = Field()
+    categories = Field()
     address = Field()
     phone_number = Field()
     website = Field()
@@ -24,6 +25,7 @@ class ActivityItemLoader(XPathItemLoader):
     default_output_processor = TakeFirst()
 
     name_out = TakeFirst()
+    categories_out = Identity()
     address_in = MapCompose(unicode.strip)
     address_out = JoinAddress()
     description_in = MapCompose(replace_nbrs)

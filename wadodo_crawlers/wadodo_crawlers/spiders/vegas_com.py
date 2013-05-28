@@ -7,6 +7,27 @@ from wadodo_crawlers.utils.flickr import get_images_for_term
 from wadodo_crawlers.settings import NEVADA_BOUNDING_BOX
 
 
+# Maps parent URL to Wadodo category
+URL_TO_CATEGORIES_MAP = {
+    'http://www.vegas.com/attractions/museums-galleries-las-vegas/': [
+        'Art',
+        'Heritage',
+        'Science'
+    ],
+    'http://www.vegas.com/attractions/recreation-las-vegas/': [
+        'Adrenaline'
+    ],
+    'http://www.vegas.com/attractions/thrill-rides-las-vegas/': [
+        'Sport',
+        'Nature'
+    ]
+}
+
+URL_TO_PRICE_RANGE_MAP = {
+    'http://www.vegas.com/attractions/attractions-for-kids/': 'free'
+}
+
+
 class VegasDotComSpider(CrawlSpider):
     name = 'vegas.com'
     allowed_domains = ['vegas.com']
@@ -50,6 +71,16 @@ class VegasDotComSpider(CrawlSpider):
         l.add_xpath('price', '//div[@class="fromprice-price"]/text()')
 
         l.add_value('source_url', response.url)
+
+        referer = response.request.headers.get('Referer', None)
+
+        if referer:
+            # If available, set categories and price range
+            if referer in URL_TO_CATEGORIES_MAP:
+                l.add_value('categories', URL_TO_CATEGORIES_MAP[referer])
+
+            if referer in URL_TO_PRICE_RANGE_MAP:
+                l.add_value('price', URL_TO_PRICE_RANGE_MAP[referer])
 
         item = l.load_item()
         name = item['name']
