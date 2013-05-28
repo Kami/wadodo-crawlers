@@ -25,9 +25,6 @@ class VegasDotComSpider(CrawlSpider):
     def __init__(self, *args, **kwargs):
         flickr_api_key = kwargs.pop('flickr_api_key', None)
 
-        if flickr_api_key is None:
-            raise ValueError('Missing flickr_api_key argument')
-
         self._flickr_api_key = flickr_api_key
         self._nevada_bbox = ','.join(NEVADA_BOUNDING_BOX)
 
@@ -57,10 +54,11 @@ class VegasDotComSpider(CrawlSpider):
         item = l.load_item()
         name = item['name']
 
-        images = get_images_for_term(self._flickr_api_key, search_term=name,
-                                     bbox=self._nevada_bbox)
-        image_urls = [item['url'] for item in images]
-        l.add_value('image_urls', image_urls)
+        if self._flickr_api_key:
+            images = get_images_for_term(self._flickr_api_key, search_term=name,
+                                         bbox=self._nevada_bbox)
+            image_urls = [item['url'] for item in images]
+            l.add_value('image_urls', image_urls)
+            item = l.load_item()
 
-        item = l.load_item()
         return item
