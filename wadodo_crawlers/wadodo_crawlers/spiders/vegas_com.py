@@ -1,10 +1,11 @@
-from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.contrib.spiders import Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import HtmlXPathSelector
 
 from wadodo_crawlers.items import ActivityItem, ActivityItemLoader
 from wadodo_crawlers.utils.flickr import get_images_for_term
 from wadodo_crawlers.settings import NEVADA_BOUNDING_BOX
+from wadodo_crawlers.spiders.base import FlickrCrawlSpider
 
 
 # Maps parent URL to Wadodo category
@@ -28,7 +29,7 @@ URL_TO_PRICE_RANGE_MAP = {
 }
 
 
-class VegasDotComSpider(CrawlSpider):
+class VegasDotComSpider(FlickrCrawlSpider):
     name = 'vegas.com'
     allowed_domains = ['vegas.com']
     start_urls = [
@@ -44,12 +45,8 @@ class VegasDotComSpider(CrawlSpider):
     ]
 
     def __init__(self, *args, **kwargs):
-        flickr_api_key = kwargs.pop('flickr_api_key', None)
-
-        self._flickr_api_key = flickr_api_key
-        self._nevada_bbox = ','.join(NEVADA_BOUNDING_BOX)
-
         super(VegasDotComSpider, self).__init__(*args, **kwargs)
+        self._nevada_bbox = ','.join(NEVADA_BOUNDING_BOX)
 
     def parse_activity(self, response):
         l = ActivityItemLoader(item=ActivityItem(), response=response)
